@@ -1,0 +1,44 @@
+<template>
+    <div class="chat-container">
+        <div class="chat-header">AI Agent</div>
+        <template if:true={sessionStarted}>
+            <div class="chat-body">
+                <template for:each={messages} for:item="msg">
+                    <div key={msg.id} class={msg.cssClass}>
+                        <strong>{msg.sender}:</strong> {msg.text}
+                    </div>
+                </template>
+
+                <!-- Show loading text -->
+                <template if:true={isWaiting}>
+                    <div class="msg bot loading">
+                        <strong>Agent:</strong> <i>fetching response...</i>
+                    </div>
+                </template>
+            </div>
+
+            <div class="chat-footer">
+                <div class="input-wrapper">
+                    <input
+                    type="text"
+                    class="chat-input"
+                    placeholder="Type your message..."
+                    value={userInput}
+                    oninput={handleInput}
+                    disabled={isWaiting}
+                    onmouseenter={sendMessage}
+                />
+                    <button class="send-btn" onclick={sendMessage} disabled={isWaiting}>
+                    &gt;
+                </button>
+                </div>
+            </div>
+            <lightning-button variant="destructive" label="End Session" onclick={endSession}
+                class="slds-m-left_small slds-m-top_small"></lightning-button>
+        </template>
+        <template if:false={sessionStarted}>
+            <lightning-button variant="brand" label="Start Session" onclick={startSession} class="slds-m-top_medium">
+            </lightning-button>
+        </template>
+    </div>
+</template>
